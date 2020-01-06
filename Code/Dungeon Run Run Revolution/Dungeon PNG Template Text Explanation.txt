@@ -1,0 +1,35 @@
+Map Style Document
+--
+Base Wall Material
+Base Floor Material
+
+Room Type Definition
+--
+Wall Material(s)
+Floor Material(s)
+
+Corridor Type Definition
+--
+Corridor Start Block Material
+Corridor Wall Material(s)
+
+Entrance Block Material
+Exit Block Material
+
+
+Tileset png template
+--
+First one (0) is empty, 1 is Base Wall Material, 2 is Base Floor Material, 3 is Entrance Block Material, 4 is Exit Block Material
+Row 2: Room Wall Material(s)
+Row 3: Room Floor Material(s)
+Row 4: Room Wall
+Row 5: Room Floor
+...
+..
+Row 8(or any even number > 2): The First 2 blank rows
+Row 9(or any odd number following the previous even number): The First 2 blank rows
+
+Row 10: (image 1) Cooridor Start Block Material, (subsequent images) Cooridor Wall Material(s)
+Row 11: Cooridor Floor Material(s)
+Row 12: (image 1) Cooridor Start Block Material, (subsequent images) Cooridor Wall Material(s)
+Row 13: Cooridor Floor Material(s)
