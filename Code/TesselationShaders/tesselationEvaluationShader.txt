@@ -1,0 +1,47 @@
+layout(binding=1) uniform sampler2DArray hieghtmap;
+layout(triangles) in;
+
+in vec3 tcs_position[];
+in vec3 tcs_normal[];
+in vec2 tcs_texCoord[];
+
+out vec3 tes_worldPos;
+out vec2 tes_texCoord;
+out vec3 tes_normal;
+
+vec3 interpolate(float u, float v, float w, vec3 a, vec3 b, vec3 c)
+{
+	//simple barycentric interpolation
+	vec3 p0 = u * a;
+	vec3 p1 = v * b;
+	vec3 p2 = w * c;
+	return (p0+p1+p2);
+}
+
+vec2 interpolate(float u2, float v2, float w2, vec2 a2, vec2 b2, vec2 c2)
+{
+	vec2 p02 = u2 * a2;
+	vec2 p12 = v2 * b2;
+	vec2 p22 = w2 * c2;
+	return (p02+p12+p22);
+}
+
+void main()
+{
+	vec3 p1 = interpolate(gl_TessCoord[0], gl_TessCoord[1], gl_TessCoord[2],tcs_position[0], tcs_position[1], tcs_position[2] );
+	vec3 n1 = interpolate(gl_TessCoord[0], gl_TessCoord[1], gl_TessCoord[2],tcs_normal[0], tcs_normal[1], tcs_normal[2] );
+	tes_texCoord = interpolate(gl_TessCoord[0], gl_TessCoord[1], gl_TessCoord[2],tcs_texCoord[0], tcs_texCoord[1], tcs_texCoord[2] );
+	
+	float height = maxDistance * texture( hieghtmap, vec3(tes_texCoord, 0) ).r;
+	p1 += height * n1;
+	
+	vec4 p = vec4(p1,1.0);
+	p = p * worldMatrix;
+	tes_worldPos = p.xyz;
+	p = p * viewMatrix;
+	p = p * projMatrix;
+	gl_Position = p;
+	vec4 n = vec4(n1,0.0);
+	n = n * worldMatrix;
+	tes_normal = n.xyz;
+}

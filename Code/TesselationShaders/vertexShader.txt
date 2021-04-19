@@ -1,0 +1,8 @@
+layout(location=0) in vec3 position;
+
+layout(binding=1) uniform sampler2DArray datatex;
+
+void main(){
+    float ascii = texelFetch(datatex, ivec3(gl_InstanceID,0,0),0 ).r;
+    gl_Position = vec4(ascii,gl_InstanceID,0,1);
+}

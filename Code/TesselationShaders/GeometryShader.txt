@@ -1,0 +1,30 @@
+layout(points) in;
+layout(triangle_strip,max_vertices=4) out;
+
+out vec3 g_texCoord;
+
+
+vec2 map(float x, float y){
+    //map pixel coordinates to view space coordinates
+    vec2 v = vec2(x,y);
+    return vec2(-1.0) + 2.0 * v * screenSize.zw ;
+}
+
+void main(){
+    float ascii = gl_in[0].gl_Position.x;
+    float charIndex = gl_in[0].gl_Position.y;
+    float x = textOrigin.x + charCellSize.x * charIndex;
+    float y = textOrigin.y;
+    gl_Position = vec4(map(x,y+charCellSize.y),-1,1);
+    g_texCoord = vec3(ascii,0,-1);
+    EmitVertex();
+    gl_Position = vec4(map(x,y),-1,1);
+    g_texCoord = vec3(ascii,0,charCellSize.y-1);
+    EmitVertex();
+    gl_Position = vec4(map(x+charCellSize.x,y+charCellSize.y),-1,1);
+    g_texCoord = vec3(ascii,charCellSize.x,-1);
+    EmitVertex();
+    gl_Position = vec4(map(x+charCellSize.x,y),-1,1);
+    g_texCoord = vec3(ascii,charCellSize.x,charCellSize.y-1);
+    EmitVertex();
+}
